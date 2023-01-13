@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    width: 50px;
+}
+
+input {
+    width: 300px;
+    height: 50px;
+    border: 0;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(41, 160, 200, 255);
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+.photo-card {
+
+width: 350px;
+border: 2px solid burlywood;
+}
+
+.info {
+    display: flex;
+    height: 100px;
+}
+
+.is-hidden {
+    display: none;
+}
