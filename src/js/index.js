@@ -70,7 +70,7 @@ function onLoad() {
   page += 1;
   
   fetchRequest(form.elements.searchQuery.value.trim(), page).then(data => {
-    createMarkup(data)
+    createMarkup(data);
       simpleLightbox.refresh();
   })
 }
