@@ -29,19 +29,19 @@ function onSearch(evt) {
   gallery.innerHTML = '';
 
   if (!value) {
-  return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
   }
-  
-  load.classList.remove('is-hidden')
-
+// return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
   fetchRequest(value).then(data => {
+    load.classList.remove('is-hidden')
+
     createMarkup(data);
       simpleLightbox.refresh();
   })
     .catch(error => console.log(error))
 }
 
-function createMarkup({ data: { hits, total } }) {
+function createMarkup({ data: { hits } }) {
   const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
     return `<div class="photo-card">
   <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
@@ -63,7 +63,6 @@ function createMarkup({ data: { hits, total } }) {
   }).join('');
  
   gallery.insertAdjacentHTML('beforeend', markup);
-   Notiflix.Notify.success(`Hooray! We found ${total} images.`);
 }
 
 function onLoad() {
