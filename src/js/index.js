@@ -50,6 +50,9 @@ function onSearch(evt) {
     simpleLightbox.refresh();
     Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
 
+    if (data.hits.length < limit) {
+      return Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+    }
   })
     .catch(error => console.log(error))
 }
@@ -83,13 +86,17 @@ function onLoad() {
   
   fetchRequest(form.elements.searchQuery.value.trim(), page, limit).then(data => {
     if (page > data.totalHits / limit) {
+      createMarkup(data);
+      simpleLightbox.refresh()
+
       load.classList.add('is-hidden');
+
       setTimeout(() => {
    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
  }, 500)
 }
     createMarkup(data);
-      simpleLightbox.refresh();
+    simpleLightbox.refresh();
   })
 }
 
