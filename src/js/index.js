@@ -18,6 +18,7 @@ form.addEventListener('submit', onSearch);
 load.addEventListener('click', onLoad);
 
 let page = 1;
+let limit = 40;
 
 load.classList.add('is-hidden');
 
@@ -29,19 +30,31 @@ function onSearch(evt) {
   gallery.innerHTML = '';
 
   if (!value) {
-return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+  return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
   }
-// return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+
   fetchRequest(value).then(data => {
+    console.log(data);
+    if (!data.hits.length) {
+      return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+    }
+
+      createMarkup(data);
     load.classList.remove('is-hidden')
 
-    createMarkup(data);
-      simpleLightbox.refresh();
+    if (data.hits.length === data.totalHits) {
+      load.classList.add('is-hidden')
+    }
+
+  
+    simpleLightbox.refresh();
+    Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
+
   })
     .catch(error => console.log(error))
 }
 
-function createMarkup({ data: { hits } }) {
+function createMarkup({ hits }) {
   const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
     return `<div class="photo-card">
   <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
@@ -68,7 +81,13 @@ function createMarkup({ data: { hits } }) {
 function onLoad() {
   page += 1;
   
-  fetchRequest(form.elements.searchQuery.value.trim(), page).then(data => {
+  fetchRequest(form.elements.searchQuery.value.trim(), page, limit).then(data => {
+    if (page > data.totalHits / limit) {
+      load.classList.add('is-hidden');
+      setTimeout(() => {
+   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+ }, 500)
+}
     createMarkup(data);
       simpleLightbox.refresh();
   })
